@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cancel Booking</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="center-box">
+        <h2>Are you sure you want to cancel this booking?</h2>
+        <a href="{{ url_for('cancel', booking_id=booking_id) }}"><button>Yes</button></a>
+        <a href="{{ url_for('booking_history') }}"><button>No</button></a>
+    </div>
+</body>
+</html>

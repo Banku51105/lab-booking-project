@@ -1,0 +1,50 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.center-box {
+    text-align: center;
+    margin-top: 100px;
+}
+.sidebar {
+    width: 200px;
+    background: #333;
+    height: 118vh;
+    float: left;
+    padding-top: 20px;
+}
+.sidebar a {
+    display: block;
+    color: white;
+    padding: 10px;
+    text-decoration: none;
+}
+.sidebar a:hover {
+    background: #555;
+}
+.content {
+    margin-left: 200px;
+    padding: 20px;
+}
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    cursor: pointer;
+}
+input, select {
+    padding: 8px;
+    margin: 5px 0;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+th {
+    background: #f4f4f4;
+}
