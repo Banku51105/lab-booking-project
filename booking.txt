@@ -2,7 +2,8 @@ Equipment 2,2000,tdfh,images/e2.jpg,Canceled
 Equipment C,1500,tdfh,images/e3.jpg,Canceled
 Equipment 3,1500,dtyj,images/e3.jpg,Canceled
 Microscope,2999,tdfh,images/e1.jpg,Canceled
-Microscope,2999,tdfh,images/Microscope.jpeg,Active
+Microscope,2999,tdfh,images/Microscope.jpeg,Canceled
 Safety Glasses,599,tdfh,images/Glasses.jpeg,Canceled
 Microscope,2999,tdfh,images/Microscope.jpeg,Active
 Microscope,2999,tdfh,images/Microscope.jpeg,Active
+Magnifier,899,heyy,images/Magnifier.jpeg,Active
