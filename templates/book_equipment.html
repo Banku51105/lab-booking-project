@@ -31,12 +31,12 @@
             border-radius: 5px;
         }
         button {
-            background: #28a745;
+            background: #000000;
             color: white;
             border: none;
         }
         button:hover {
-            background: #218838;
+            background: #000000;
         }
     </style>
 </head>
@@ -45,11 +45,17 @@
     <h2>{{ equipment.name }}</h2>
     <img src="{{ url_for('static', filename=equipment.image) }}" alt="{{ equipment.name }}">
     <p>Price: ₹{{ equipment.price }}</p>
+
     <form action="{{ url_for('confirm_booking', equipment_id=equipment.id) }}" method="post">
+        <!-- Hidden inputs so Flask can access them -->
+        <input type="hidden" name="equipment_name" value="{{ equipment.name }}">
+        <input type="hidden" name="equipment_price" value="{{ equipment.price }}">
+
         <input type="text" name="address" placeholder="Enter delivery address" required>
         <p><b>Payment Method:</b> Cash on Delivery</p>
         <button type="submit">Confirm Booking</button>
     </form>
 </div>
+
 </body>
 </html>

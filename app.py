@@ -78,11 +78,11 @@ def home():
 
 # Equipment data (you can replace with real names/images later)
 equipment_list = [
-    {"id": 1, "name": "Equipment 1", "price": 1000, "image": "images/e1.jpg"},
-    {"id": 2, "name": "Equipment 2", "price": 2000, "image": "images/e2.jpg"},
-    {"id": 3, "name": "Equipment 3", "price": 1500, "image": "images/e3.jpg"},
-    {"id": 4, "name": "Equipment 4", "price": 1200, "image": "images/e4.jpg"},
-    {"id": 5, "name": "Equipment 5", "price": 1800, "image": "images/e5.jpg"}
+    {"id": 1, "name": "Microscope", "price": 2999, "image": "images/Microscope.jpeg"},
+    {"id": 2, "name": "Magnifier", "price": 899, "image": "images/Magnifier.jpeg"},
+    {"id": 3, "name": "Safety Glasses", "price": 599, "image": "images/Glasses.jpeg"},
+    {"id": 4, "name": "Beaker", "price": 399, "image": "images/Beaker.jpeg"},
+    {"id": 5, "name": "Coat", "price": 1499, "image": "images/Coat.jpeg"}
 ]
 
 @app.route("/book")
@@ -98,46 +98,61 @@ def book_equipment(equipment_id):
 
 @app.route("/confirm_booking/<int:equipment_id>", methods=["POST"])
 def confirm_booking(equipment_id):
-    equipment = next((item for item in equipment_list if item["id"] == equipment_id), None)
-    if not equipment:
-        return "Equipment not found", 404
-
     address = request.form["address"]
-    user_id = session.get("user_id")
+    equipment_name = request.form["equipment_name"]
+    equipment_price = request.form["equipment_price"]
 
-    # Save booking in plain text
-    with open("bookings.txt", "a") as f:
-        f.write(f"{user_id},{equipment['name']},{equipment['price']},{address}\n")
+    # Optional: store image for history
+    equipment = next((eq for eq in equipment_list if eq["id"] == equipment_id), None)
+    equipment_image = equipment["image"] if equipment else ""
+
+    # Save booking in file
+    with open("booking.txt", "a") as f:
+        f.write(f"{equipment_name},{equipment_price},{address},{equipment_image},Active\n")
 
     return render_template("booking_confirmation.html")
 
-# Booking history
-@app.route("/booking_history")
-def booking_history():
-    if "user_id" not in session:
-        return redirect(url_for("login"))
-
-    conn = sqlite3.connect("database.db")
-    c = conn.cursor()
-    c.execute("SELECT * FROM bookings WHERE user_id = ?", (session["user_id"],))
-    bookings = c.fetchall()
-    conn.close()
+@app.route("/history")
+def history():
+    bookings = []
+    try:
+        with open("booking.txt", "r") as f:
+            for line in f:
+                parts = line.strip().split(",")
+                if len(parts) >= 4:
+                    bookings.append({
+                        "name": parts[0],
+                        "price": parts[1],
+                        "address": parts[2],
+                        "image": parts[3],
+                        "status": parts[4] if len(parts) > 4 else "Active"
+                    })
+    except FileNotFoundError:
+        pass
 
     return render_template("booking_history.html", bookings=bookings)
 
-# Cancel booking
-@app.route("/cancel/<int:booking_id>")
-def cancel(booking_id):
-    if "user_id" not in session:
-        return redirect(url_for("login"))
+@app.route("/cancel_booking/<int:booking_index>", methods=["POST"])
+def cancel_booking(booking_index):
+    try:
+        with open("booking.txt", "r") as f:
+            lines = f.readlines()
 
-    conn = sqlite3.connect("database.db")
-    c = conn.cursor()
-    c.execute("UPDATE bookings SET status = 'Cancelled' WHERE booking_id = ? AND user_id = ?", (booking_id, session["user_id"]))
-    conn.commit()
-    conn.close()
+        if 0 <= booking_index < len(lines):
+            parts = lines[booking_index].strip().split(",")
+            if len(parts) < 5:
+                parts.append("Active")  # If no status, default to Active
 
-    return redirect(url_for("booking_history"))
+            parts[4] = "Canceled"  # Mark status as canceled
+            lines[booking_index] = ",".join(parts) + "\n"
+
+        with open("booking.txt", "w") as f:
+            f.writelines(lines)
+
+    except FileNotFoundError:
+        pass
+
+    return redirect(url_for("history"))
 
 # Logout
 @app.route("/logout")

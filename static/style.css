@@ -9,7 +9,7 @@ body {
 }
 .sidebar {
     width: 200px;
-    background: #333;
+    background: #000000;
     height: 118vh;
     float: left;
     padding-top: 20px;
@@ -21,7 +21,7 @@ body {
     text-decoration: none;
 }
 .sidebar a:hover {
-    background: #555;
+    background: #000000;
 }
 .content {
     margin-left: 200px;
